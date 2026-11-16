@@ -1,0 +1,64 @@
+:: StoryTitle
+Untitled Story 1
+
+:: StoryData
+{
+  "ifid": "0B8A9D4A-0AA1-4A18-83CC-7A192CBCD90F",
+  "format": "Harlowe",
+  "format-version": "3.3.9",
+  "start": "Opening",
+  "zoom": 1
+}
+
+:: Story Stylesheet [stylesheet]
+tw-story {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #101820;
+    color: white;
+    font-size: 22px;
+}
+
+tw-passage {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+}
+
+h1 {
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: 48px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+}
+
+tw-link {
+    color: #4da6ff;
+    font-weight: bold;
+}
+
+tw-link:hover {
+    color: white;
+}
+
+:: Opening {"position":"700,325","size":"100,100"}
+Fantasy football season is finally here! It's time to redraft your team... 
+
+
+
+[[continue]]
+
+:: continue {"position":"700,450","size":"100,100"}
+(set: $draftPosition to (random: 1, 12))
+
+# Welcome to Your Fantasy Draft!
+
+You are entering a 12-team fantasy football league.
+
+The draft order has been randomized!
+
+**You have the $draftPosition pick in the first round!**
+
+[[Continue to Draft->DraftRound1]]
+
+:: DraftRound1 {"position":"700,575","size":"100,100"}
+
