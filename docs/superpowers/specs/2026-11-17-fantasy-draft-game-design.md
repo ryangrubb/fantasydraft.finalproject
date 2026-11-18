@@ -62,7 +62,8 @@ The current story is the start of this game: an opening passage, a random draft 
 - **Injury odds:** the same for every player.
 - **Real-life injuries and status:** ignored. Only the game's random injuries count.
 - **During the draft:** the player sees only name, position and NFL team.
-- **Computer teams:** they usually take the best available player, but a randomizer sometimes lets good players slide.
+- **Computer teams draft like real drafters, using 2026 ADP (average draft position).** At any pick, the pool should look realistic. For example, a consensus top-3 pick like Jahmyr Gibbs is gone by pick 5.
+- **Who goes before you varies from run to run**, so the pool at your pick isn't always the same. Stars still go about where they really went, and later rounds vary more.
 
 ## Calls made in the conversation (proposed by Claude, not objected to)
 
@@ -94,7 +95,7 @@ Each player has:
 - `name`, `pos` (QB/RB/WR/TE), `team`
 - `avg`: 2026 PPR points per game, one decimal
 - `bye`: 2026 bye week
-- `rank`: overall draft rank, used only by the computer teams
+- `adp`: 2026 preseason ADP, 12-team full PPR, used only by the computer teams. Players outside the ADP list get `adp` 200.
 
 **Snapshot:** through the **latest fully completed week** when the data is collected (Week 10 at the time of writing). The week number is stored as one variable in the startup passage, and the intro screen reads from it ("Player values: 2026 season, Weeks 1–10, full PPR"). *(Claude's call.)*
 - If complete data for that week isn't published yet, use the previous complete week.
@@ -108,14 +109,17 @@ Each player has:
 - A traded player shows his current team *(Claude's call)*.
 - Bye weeks come from the official 2026 NFL schedule.
 
-**Pool:** roughly 20 QB, 50 RB, 60 WR and 20 TE, chosen by `rank`. The aim is a pool comfortably larger than 120 picks, with realistic depth at each position.
+**ADP source:** a consensus 2026 preseason ADP for 12-team full PPR redraft leagues (e.g. FantasyPros consensus, or Sleeper). Use one source, and note which in a comment in the startup passage.
 
-**`rank` measures value over a replacement player at the same position.** It is not raw average, because QBs score the most raw points and the computer teams would otherwise take QBs first.
-- `value = avg − baseline`. The baseline is the average of the 12th-best QB, 24th RB, 30th WR and 12th TE.
-- Sort by `value`, highest first. That order is `rank`.
-- Computing this offline with a small script is fine. The game itself only reads `rank`.
+**Pool** *(Claude's call)*: about 150 players, built from two parts:
+1. **The top ~150 by ADP** (QB, RB, WR and TE only). This makes the pool at each pick look like a real draft.
+2. **Breakouts:** anyone outside that list whose 2026 average would put him in the top ~150 by value over replacement. Value is measured against the 12th QB, 24th RB, 30th WR and 12th TE. These players get `adp` 200, so the computer teams rarely take them early. They are the reward for knowing who's producing this year.
 
-**Tuning numbers** live together in the same startup passage: injury odds, IR length, number of rounds, number of teams, and the computer randomness weights.
+If both parts together go well over 150, trim the lowest-ADP part-1 players who also have low averages.
+
+Computing this offline with a small script is fine. The game itself only reads `adp`.
+
+**Tuning numbers** live together in the same startup passage: injury odds, IR length, number of rounds, number of teams, and the ADP wobble range.
 
 ### Intro
 
@@ -129,17 +133,21 @@ Each player has:
 
 **Order:** snake. Team 1 picks first in odd rounds and last in even rounds. The player is team `$draftPosition`.
 
-**Computer pick:**
-- Look at the 3 best available players by `rank`.
-- Take the best 60% of the time, the 2nd 25%, and the 3rd 15%.
-- **Roster limits per computer team:** at most 2 QB and 2 TE. If a candidate would break a limit, skip him and look further down the list. This stops the computer teams from wasting picks in ways that look silly.
+**Draft board for this run** *(Claude's call)*:
+- At the start of each run, give every player a **board value = `adp` × a random factor between 0.85 and 1.15**, rolled fresh each run.
+- The computer teams always take the available player with the **lowest board value**.
+- Because the wobble is a percentage, it stays small for stars (ADP 2 lands between 1.7 and 2.3) and grows later on (ADP 60 lands between 51 and 69).
+- So the first picks stay realistic, a top-3 player is gone by pick 5, and who's left at your mid- and late-round picks changes from run to run.
+- The ±15% range is a tuning number in the startup passage.
+
+**Roster limits per computer team:** at most 2 QB and 2 TE, plus no 2nd QB or 2nd TE before round 8. If a candidate would break a limit, skip him and take the next-lowest board value. This keeps the computer teams drafting like people.
 
 **Running computer picks:**
 - Computer picks run without the player clicking through them, until it's the player's turn.
 - Show a short "Picks since your last turn" list (pick number and player name only), so the player sees who went.
 
 **Player's pick:**
-- Show the available players **grouped by position**, sorted **alphabetically** within each group. Never sort by `avg` or `rank` (see Anti-goals).
+- Show the available players **grouped by position**, sorted **alphabetically** within each group. Never sort by `avg`, `adp` or board value (see Anti-goals).
 - Each entry shows name, team, and a link to draft him.
 - Show the player's roster so far.
 - Show the round and pick number.
