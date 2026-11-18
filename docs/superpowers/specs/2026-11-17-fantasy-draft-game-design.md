@@ -1,7 +1,7 @@
 # Fantasy Draft Game — Design
 
 **Date:** 2026-11-17
-**Status:** Draft, awaiting approval
+**Status:** Awaiting approval
 **Repo:** `ryangrubb/fantasydraft.finalproject`
 **Source:** `src/fantasy-draft.twee` (Harlowe 3.3.9, Twine 2.12)
 
@@ -60,6 +60,7 @@ The current story is the start of this game: an opening passage, a random draft 
 - **Season score:** the average of the weekly team totals across the season.
 - **Random injuries:** three severities (1 week missed, IR, season-ending), each starting in a random week.
 - **Injury odds:** the same for every player.
+- **Real-life injuries and status:** ignored. Only the game's random injuries count.
 - **During the draft:** the player sees only name, position and NFL team.
 - **Computer teams:** they usually take the best available player, but a randomizer sometimes lets good players slide.
 
@@ -103,6 +104,8 @@ Each player has:
 **Building the list:**
 - Use any reputable source of season PPR totals and games played.
 - `avg = total PPR points ÷ games played`. Only count players with at least 3 games played.
+- **Real-life status is ignored** *(author's decision)*. Anyone with 3+ games played can be in the pool, even if he is currently injured, suspended or released. His frozen average is used, and only the game's random injuries apply.
+- A traded player shows his current team *(Claude's call)*.
 - Bye weeks come from the official 2026 NFL schedule.
 
 **Pool:** roughly 20 QB, 50 RB, 60 WR and 20 TE, chosen by `rank`. The aim is a pool comfortably larger than 120 picks, with realistic depth at each position.
