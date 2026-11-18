@@ -34,7 +34,7 @@ The current story is the start of this game: an opening passage, a random draft 
 
 ## Anti-goals (would make it a failure even if it works)
 
-- **Leaking the hidden values during the draft**, directly or indirectly. For example, listing available players in value order would give away the rankings.
+- **Leaking the hidden values during the draft**, directly or indirectly. For example, listing available players in order of their 2026 average, or showing this run's nudged board values, would give the answers away. Sorting by real ADP is fine: that's public, and it's what any draft app shows.
 - **A slog:** too many clicks per run, or long waits while computer teams pick.
 - **Luck swamping skill**, so a well-built team can't reliably beat a careless one.
 
@@ -61,7 +61,7 @@ The current story is the start of this game: an opening passage, a random draft 
 - **Random injuries:** three severities (1 week missed, IR, season-ending), each starting in a random week.
 - **Injury odds:** the same for every player.
 - **Real-life injuries and status:** ignored. Only the game's random injuries count.
-- **During the draft:** the player sees only name, position and NFL team.
+- **During the draft:** the player sees name, position, NFL team and real ADP. Available players are listed in ADP order, like a real draft app.
 - **Computer teams draft like real drafters, using 2026 ADP (average draft position).** At any pick, the pool should look realistic. For example, a consensus top-3 pick like Jahmyr Gibbs is gone by pick 5.
 - **Who goes before you varies from run to run**, so the pool at your pick isn't always the same. Stars still go about where they really went, and later rounds vary more.
 
@@ -149,8 +149,10 @@ Computing this offline with a small script is fine. The game itself only reads `
 - Show a short "Picks since your last turn" list (pick number and player name only), so the player sees who went.
 
 **Player's pick:**
-- Show the available players **grouped by position**, sorted **alphabetically** within each group. Never sort by `avg`, `adp` or board value (see Anti-goals).
-- Each entry shows name, team, and a link to draft him.
+- Show the available players in **one list sorted by real `adp`**, lowest first, the way a draft app does *(author's decision)*. Never sort by `avg` or by this run's board value (see Anti-goals).
+- Breakout players (`adp` 200) go at the bottom in alphabetical order, with their ADP shown as "—".
+- Each entry shows ADP, name, position, team, and a link to draft him *(showing the ADP number is Claude's call)*.
+- **Position filter** *(Claude's call)*: links at the top (All / QB / RB / WR / TE) narrow the list, so 150 names stay usable.
 - Show the player's roster so far.
 - Show the round and pick number.
 
