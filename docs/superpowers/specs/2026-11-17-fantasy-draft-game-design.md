@@ -109,7 +109,10 @@ Each player has:
 - A traded player shows his current team *(Claude's call)*.
 - Bye weeks come from the official 2026 NFL schedule.
 
-**ADP source:** a consensus 2026 preseason ADP for 12-team full PPR redraft leagues (e.g. FantasyPros consensus, or Sleeper). Use one source, and note which in a comment in the startup passage.
+**ADP source** *(author's decision)*: **FantasyPros PPR overall ADP** (`fantasypros.com/nfl/adp/ppr-overall.php`). It averages real drafts on ESPN, Sleeper, CBS, NFL.com and others, not expert rankings.
+- Use the **Wayback Machine snapshot from just before Week 1 of 2026**, the latest one before kickoff (`web.archive.org/web/2026*/fantasypros.com/nfl/adp/ppr-overall.php`). Today's live page includes in-season drafts, which carry hindsight.
+- Sanity check: players who broke out during the season, such as Isaiah Likely, should sit at their preseason ADP, not their current one.
+- Record the snapshot date and URL in a comment in the startup passage.
 
 **Pool** *(Claude's call)*: about 150 players, built from two parts:
 1. **The top ~150 by ADP** (QB, RB, WR and TE only). This makes the pool at each pick look like a real draft.
