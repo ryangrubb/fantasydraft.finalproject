@@ -95,6 +95,7 @@ Each player has:
 - `name`, `pos` (QB/RB/WR/TE), `team`
 - `avg`: 2026 PPR points per game, one decimal
 - `bye`: 2026 bye week
+- `elite`: true for a QB or TE with ADP 36 or better (computer teams may take him in rounds 1–2)
 - `adp`: 2026 preseason ADP, 12-team full PPR, used only by the computer teams. Players outside the ADP list get `adp` 200.
 
 **Snapshot:** through the **latest fully completed week** when the data is collected (Week 10 at the time of writing). The week number is stored as one variable in the startup passage, and the intro screen reads from it ("Player values: 2026 season, Weeks 1–10, full PPR"). *(Claude's call.)*
@@ -140,7 +141,10 @@ Computing this offline with a small script is fine. The game itself only reads `
 - So the first picks stay realistic, a top-3 player is gone by pick 5, and who's left at your mid- and late-round picks changes from run to run.
 - The ±15% range is a tuning number in the startup passage.
 
-**Roster limits per computer team:** at most 2 QB and 2 TE, plus no 2nd QB or 2nd TE before round 8. If a candidate would break a limit, skip him and take the next-lowest board value. This keeps the computer teams drafting like people.
+**Roster rules per computer team** *(author's decision, with Claude's limits kept)*:
+- **No QB or TE in rounds 1–2, except elite ones.** A QB or TE counts as elite if his 2026 ADP is 36 or better, meaning a top-3-round pick in a 12-team league. The author named Josh Allen, Brock Bowers and Trey McBride. The rest come from the ADP source when the data is gathered, not from memory. Elite players are marked `elite: true` in the player list, so the list is easy to check and edit.
+- **No 2nd QB or 2nd TE before round 8**, and at most 2 of each.
+- If a candidate would break a rule, skip him and take the next-lowest board value.
 
 **Running computer picks:**
 - Computer picks run without the player clicking through them, until it's the player's turn.
